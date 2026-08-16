@@ -4,82 +4,21 @@
     <title>PLAYERUNKNOWN'S BATTLEGROUNDS</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="/">
     <script>
         var globalScope = null;
-        // Read auth params from URL (passed by launcher) - manual parser for old Coherent GT
-        var _authToken = '', _authUser = '';
-        try {
-            var _qs = window.location.search.substring(1);
-            var _pairs = _qs.split('&');
-            for (var i = 0; i < _pairs.length; i++) {
-                var _kv = _pairs[i].split('=');
-                if (_kv[0] === 'token') _authToken = decodeURIComponent(_kv[1] || '');
-                if (_kv[0] === 'user') _authUser = decodeURIComponent(_kv[1] || '');
-            }
-        } catch(e) {}
-        var _wsTokenSuffix = _authToken ? '?token=' + encodeURIComponent(_authToken) : '';
         var broConfiguration =
-        {   "gate": "http://217.199.220.41:10000/index.html",
-            "uri": "http://217.199.220.41:10000/publicproxy",
-            "entry": "ws://217.199.220.41:10000/userproxy" + _wsTokenSuffix,
-            "secureEntry": "ws://217.199.220.41:10000/userproxy" + _wsTokenSuffix,
-            "useSecure": false,
-            "credential":
-            {    "lpc": "provider={provider}&ticket={ticket}&playerNetId={playerNetId}&cc={cc}&clientGameVersion={clientGameVersion}"    },
-            "ignoreVerreq": true,
-            "LayoutMode": "",
-            "LanpartyHome": "" }
+        {   "gate": "http://217.199.220.41:10000/index.html",     
+			"uri": "http://217.199.220.41:10000/publicproxy",     
+			"entry": "ws://217.199.220.41:10000/userproxy",     
+			"secureEntry": "ws://217.199.220.41:10000/userproxy",     
+			"useSecure": false,     
+			"credential": 
+			{	"lpc": "provider={provider}&ticket={ticket}&playerNetId={playerNetId}&cc={cc}&clientGameVersion={clientGameVersion}"	}, 
+			"verreq": "1.4.2",     
+			"LayoutMode": "",     
+			"LanpartyHome": "" }
 
         var production = false;
-
-        // Mock engine properties that main.js accesses during initialization
-        // These are normally provided by the C++ Coherent GT engine
-        if (typeof engine === 'undefined') {
-            window.engine = {};
-        }
-        (function() {
-            var mockAuthData = {
-                provider: "outer",
-                source: "lpc",
-                id: "lpc,localplayer",
-                token: "localtoken",
-                playerNetId: "L.lpc,localplayer",
-                userSerial: "L.lpc,localplayer",
-                fullGameVersion: "1.4.0.15",
-                outerKey: "",
-                antiCheatSolution: "be",
-                appId: "lpc"
-            };
-            // Define GetClientAuthData as a getter that returns mock data
-            // The engine might set this later (when isAttached), so use defineProperty
-            var _engine = window.engine || {};
-            if (!_engine.GetClientAuthData) {
-                Object.defineProperty(_engine, 'GetClientAuthData', {
-                    get: function() { return mockAuthData; },
-                    configurable: true
-                });
-            }
-            if (!_engine.GetGameVersion) {
-                Object.defineProperty(_engine, 'GetGameVersion', {
-                    get: function() { return "1.4.0"; },
-                    configurable: true
-                });
-            }
-            if (!_engine.GetCurrentCultureName) {
-                Object.defineProperty(_engine, 'GetCurrentCultureName', {
-                    get: function() { return "en_US"; },
-                    configurable: true
-                });
-            }
-            if (!_engine.GetOsLanguage) {
-                Object.defineProperty(_engine, 'GetOsLanguage', {
-                    get: function() { return "en-US"; },
-                    configurable: true
-                });
-            }
-            window.engine = _engine;
-        })();
     </script>
     <link rel="stylesheet" type="text/css" href="./assets/css/swiper.min.css">
     <script src="./coherent/coherent.js"></script>
